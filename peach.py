@@ -1,6 +1,7 @@
 import requests
 import json
 import matplotlib.pyplot as plt
+import matplotlib.ticker as plticker
 
 def recieve_data():
     tickers = input("ticker: ").split()
@@ -26,7 +27,17 @@ def main():
     print(axs)
     for c in all_data:
         axs[i].set_title(c[0]["symbol"])
-        axs[i].plot([1, 2, 3], [1, 2, 3])
+        xAxis = []
+        yAxis = []
+        for report in c[0]["financials"]:
+            xAxis.append(report["date"])
+            if report["Revenue"] != "":
+                yAxis.append(float(report["Revenue"]))
+            else:
+                yAxis.append(0)
+        print(xAxis, yAxis)
+        axs[i].xaxis.set_major_locator(plticker.MultipleLocator(base=len(xAxis)/5))
+        axs[i].plot(xAxis, yAxis)
         i = i + 1
     plt.show()
 
